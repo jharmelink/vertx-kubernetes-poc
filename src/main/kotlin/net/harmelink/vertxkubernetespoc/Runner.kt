@@ -8,7 +8,8 @@ import io.vertx.core.VertxOptions
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager
 import org.slf4j.LoggerFactory
 
-private const val dns = "kubernetes.default.svc.cluster.local"
+private const val namespace = "vertx"
+private const val serviceName = "vertx-kubernetes-poc-service"
 
 private val logger = LoggerFactory.getLogger("main")!!
 
@@ -23,24 +24,19 @@ fun main(args: Array<String>) {
 
 private fun runKubernetes() {
     val discoveryStrategyConfig = DiscoveryStrategyConfig(HazelcastKubernetesDiscoveryStrategyFactory())
-    discoveryStrategyConfig.addProperty("service-dns", dns)
-
     val discoveryConfig = DiscoveryConfig()
     discoveryConfig.addDiscoveryStrategyConfig(discoveryStrategyConfig)
 
-    val multicastConfig = MulticastConfig()
-            .setEnabled(false)
-    val tcpIpConfig = TcpIpConfig()
-            .setEnabled(false)
-    val joinConfig = JoinConfig()
-            .setMulticastConfig(multicastConfig)
-            .setTcpIpConfig(tcpIpConfig)
-            .setDiscoveryConfig(discoveryConfig)
-    val networkConfig = NetworkConfig()
-            .setJoin(joinConfig)
     val config = Config()
-            .setProperty("hazelcast.discovery.enabled", "true")
-            .setNetworkConfig(networkConfig)
+            .setNetworkConfig(NetworkConfig()
+                    .setJoin(JoinConfig()
+                            .setDiscoveryConfig(discoveryConfig)
+                            .setMulticastConfig(MulticastConfig()
+                                    .setEnabled(false))
+                            .setKubernetesConfig(KubernetesConfig()
+                                    .setEnabled(true)
+                                    .setProperty("namespace", namespace)
+                                    .setProperty("service-name", serviceName))))
 
     runClustered(HazelcastClusterManager(config))
 }

@@ -24,14 +24,11 @@ metadata:
   namespace: vertx
   name: vertx-kubernetes-poc-service
 spec:
-  type: ClusterIP
-  clusterIP: None
+  type: LoadBalancer
   selector:
     component: vertx-kubernetes-poc
   ports:
     - name: hazelcast
       port: 5701
-      protocol: TCP
     - name: http
       port: 8080
-      protocol: TCP
