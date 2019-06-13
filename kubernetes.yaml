@@ -1,0 +1,37 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: vertx
+  name: vertx-kubernetes-poc-deployment
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        component: vertx-kubernetes-poc
+    spec:
+      containers:
+        - image: vertx-kubernetes-poc:1.0-SNAPSHOT
+          name: vertx-kubernetes-poc
+          ports:
+            - containerPort: 8080
+              name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: vertx
+  name: vertx-kubernetes-poc-service
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    component: vertx-kubernetes-poc
+  ports:
+    - name: hazelcast
+      port: 5701
+      protocol: TCP
+    - name: http
+      port: 8080
+      protocol: TCP
