@@ -81,25 +81,30 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>4.0.2</version>
+                <version>4.1.0-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <generateApiDocumentation>false</generateApiDocumentation>
-                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <apiPackage>net.harmelink.vertxkubernetespoc.api</apiPackage>
                             <generateApiTests>false</generateApiTests>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <modelPackage>net.harmelink.vertxkubernetespoc.model</modelPackage>
                             <generateModelTests>false</generateModelTests>
+                            <generateModelDocumentation>false</generateModelDocumentation>
                             <supportingFilesToGenerate>MainApiException.java</supportingFilesToGenerate>
                             <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>
                             <invokerPackage>net.harmelink.vertxkubernetespoc</invokerPackage>
+                            <packageName>net.harmelink.vertxkubernetespoc</packageName>
                             <generatorName>java-vertx</generatorName>
                             <configOptions>
+                                <java8>true</java8>
                                 <dateLibrary>java8</dateLibrary>
                                 <hideGenerationTimestamp>true</hideGenerationTimestamp>
                                 <rxInterface>true</rxInterface>
+                                <rxVersion2>true</rxVersion2>
                                 <sourceFolder>${maven.compiler.target}</sourceFolder>
                             </configOptions>
                         </configuration>

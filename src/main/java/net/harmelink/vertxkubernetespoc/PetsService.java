@@ -2,8 +2,8 @@ package net.harmelink.vertxkubernetespoc;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import org.openapitools.server.api.model.Pet;
-import org.openapitools.server.api.verticle.PetsApi;
+import net.harmelink.vertxkubernetespoc.api.PetsApi;
+import net.harmelink.vertxkubernetespoc.model.Pet;
 
 import java.util.List;
 

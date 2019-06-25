@@ -6,7 +6,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
-import org.openapitools.server.api.verticle.PetsApiVerticle;
+import net.harmelink.vertxkubernetespoc.api.PetsApiVerticle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
