@@ -30,11 +30,6 @@
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>
-            <artifactId>vertx-lang-kotlin</artifactId>
-            <version>${vertx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
             <artifactId>vertx-hazelcast</artifactId>
             <version>${vertx.version}</version>
             <exclusions>
@@ -43,6 +38,11 @@
                     <artifactId>hazelcast</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-rx-java2</artifactId>
+            <version>${vertx.version}</version>
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>
@@ -60,6 +60,16 @@
             <version>${hazelcast-kubernetes.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>2.2.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.9.9</version>
+        </dependency>
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
@@ -69,32 +79,29 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.version}</version>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>4.0.2</version>
                 <executions>
                     <execution>
-                        <id>compile</id>
-                        <phase>process-sources</phase>
                         <goals>
-                            <goal>compile</goal>
+                            <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <sourceDirs>
-                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-                            </sourceDirs>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>test-compile</id>
-                        <phase>process-test-sources</phase>
-                        <goals>
-                            <goal>test-compile</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
-                            </sourceDirs>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <supportingFilesToGenerate>MainApiException.java</supportingFilesToGenerate>
+                            <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>
+                            <invokerPackage>net.harmelink.vertxkubernetespoc</invokerPackage>
+                            <generatorName>java-vertx</generatorName>
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                                <rxInterface>true</rxInterface>
+                                <sourceFolder>${maven.compiler.target}</sourceFolder>
+                            </configOptions>
                         </configuration>
                     </execution>
                 </executions>
@@ -113,9 +120,12 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Main-Class>net.harmelink.vertxkubernetespoc.RunnerKt</Main-Class>
-                                        <Add-Exports>java.base/jdk.internal.ref java.base/jdk.internal.misc</Add-Exports>
-                                        <Add-Opens>java.base/java.lang java.base/java.nio java.base/sun.nio.ch java.management/sun.management jdk.management/com.sun.management.internal</Add-Opens>
+                                        <Main-Class>net.harmelink.vertxkubernetespoc.Runner</Main-Class>
+                                        <Add-Exports>java.base/jdk.internal.ref java.base/jdk.internal.misc
+                                        </Add-Exports>
+                                        <Add-Opens>java.base/java.lang java.base/java.nio java.base/sun.nio.ch
+                                            java.management/sun.management jdk.management/com.sun.management.internal
+                                        </Add-Opens>
                                     </manifestEntries>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
